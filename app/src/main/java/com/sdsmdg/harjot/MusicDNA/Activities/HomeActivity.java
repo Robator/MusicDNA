@@ -227,7 +227,7 @@ public class HomeActivity extends AppCompatActivity
     public static RecentlyPlayed recentlyPlayed;
     public static Favourite favouriteTracks;
     public static Settings settings;
-
+//WTF
     public static Queue queue;
     public static Queue originalQueue;
 

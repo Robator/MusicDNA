@@ -40,7 +40,6 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.Config;
 import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.CustomAdapter;
 import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.SnappyRecyclerView;
 import com.sdsmdg.harjot.MusicDNA.CustomViews.CustomProgressBar;
