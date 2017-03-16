@@ -142,6 +142,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -1519,9 +1520,11 @@ public class HomeActivity extends AppCompatActivity
         if (musicCursor != null && musicCursor.moveToFirst()) {
             //get columns
             int titleColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media.TITLE);
+                    (android.provider.MediaStore.MediaColumns.DATE_ADDED);
             int idColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media._ID);
+//            int dateAdded = musicCursor.getColumnIndex
+//                    (MediaStore.MediaColumns.DATE_ADDED);
             int artistColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.ARTIST);
             int albumColumn = musicCursor.getColumnIndex
@@ -1534,7 +1537,9 @@ public class HomeActivity extends AppCompatActivity
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
-                String thisTitle = musicCursor.getString(titleColumn);
+                Date date = new Date(Integer.parseInt(musicCursor.getString(titleColumn)));
+                String thisTitle = date.toString();
+//                String thisTitle = Integer.toString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
                 String thisAlbum = musicCursor.getString(albumColumn);
                 String path = musicCursor.getString(pathColumn);
