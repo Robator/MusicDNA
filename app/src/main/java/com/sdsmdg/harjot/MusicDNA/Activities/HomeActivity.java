@@ -142,6 +142,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -174,6 +175,7 @@ public class HomeActivity extends AppCompatActivity
         AlbumFragment.onAlbumClickListener,
         ViewAlbumFragment.albumCallbackListener,
         ArtistFragment.onArtistClickListener,
+//        LocalRecentlyAdded.OnLocalLastTrackSelectedListener,
         ViewArtistFragment.artistCallbackListener,
         RecentsFragment.recentsCallbackListener,
         SettingsFragment.SettingsFragmentCallbackListener,
@@ -189,7 +191,7 @@ public class HomeActivity extends AppCompatActivity
     public static List<Album> albums = new ArrayList<>();
     public static List<Album> finalAlbums = new ArrayList<>();
     public static List<Artist> artists = new ArrayList<>();
-    public static List<Artist> finalArtists = new ArrayList<>();
+        public static List<Artist> finalArtists = new ArrayList<>();
     public static List<UnifiedTrack> continuePlayingList = new ArrayList<>();
 
     public String versionName;
@@ -1520,6 +1522,8 @@ public class HomeActivity extends AppCompatActivity
             //get columns
             int titleColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.TITLE);
+            int dateAdded = musicCursor.getColumnIndex
+                    (MediaStore.MediaColumns.DATE_ADDED);
             int idColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media._ID);
             int artistColumn = musicCursor.getColumnIndex
@@ -1534,13 +1538,14 @@ public class HomeActivity extends AppCompatActivity
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
+                Date thisDate = new Date(Integer.parseInt(musicCursor.getString(titleColumn)));
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
                 String thisAlbum = musicCursor.getString(albumColumn);
                 String path = musicCursor.getString(pathColumn);
                 long duration = musicCursor.getLong(durationColumn);
                 if (duration > 10000) {
-                    LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration);
+                    LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration, thisDate);
                     localTrackList.add(lt);
                     finalLocalSearchResultList.add(lt);
 
