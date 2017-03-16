@@ -27,8 +27,11 @@ import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.Utilities.Comparators.LocalMusicComparator;
+import com.sdsmdg.harjot.MusicDNA.Utilities.Comparators.RecentlyAddedComparator;
 import com.squareup.leakcanary.RefWatcher;
 
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -94,6 +97,10 @@ public class RecentlyAddedFragment extends Fragment {
 
         if (HomeActivity.localTrackList.size() == 0) {
             shuffleFab.setVisibility(View.INVISIBLE);
+        }
+        else {
+            Collections.sort(HomeActivity.localTrackList, new RecentlyAddedComparator());
+            Collections.sort(HomeActivity.finalLocalSearchResultList, new RecentlyAddedComparator());
         }
 
         shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
