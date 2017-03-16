@@ -85,6 +85,7 @@ import com.sdsmdg.harjot.MusicDNA.Fragments.EqualizerFragment.EqualizerFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.FavouritesFragment.FavouritesFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.FolderContentFragment.FolderContentFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.AllFoldersFragment.FolderFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.RecentlyAddedFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.NewPlaylistFragment.NewPlaylistFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.QueueFragment.QueueFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.RecentsFragment.RecentsFragment;
@@ -175,6 +176,7 @@ public class HomeActivity extends AppCompatActivity
         AlbumFragment.onAlbumClickListener,
         ViewAlbumFragment.albumCallbackListener,
         ArtistFragment.onArtistClickListener,
+        RecentlyAddedFragment.OnLocalTrackSelectedListener,
 //        LocalRecentlyAdded.OnLocalLastTrackSelectedListener,
         ViewArtistFragment.artistCallbackListener,
         RecentsFragment.recentsCallbackListener,
