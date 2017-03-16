@@ -11,6 +11,6 @@ import java.util.Comparator;
 public class RecentlyAddedComparator implements Comparator<LocalTrack> {
     @Override
     public int compare(LocalTrack lhs, LocalTrack rhs) {
-        return lhs.getDateAdded().compareTo(rhs.getDateAdded());
+        return rhs.getDateAdded().compareTo(lhs.getDateAdded());
     }
 }
