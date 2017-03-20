@@ -24,7 +24,7 @@ public class VisualizerView extends View {
     public static float width, height, angle, color, lnDataDistance, distance, size, volume, power, outerRadius, alpha;
     public static float normalizedPosition;
     public static double LOG_MAX = Math.log(64);
-    public static double TAU = Math.sin(1);
+    public static double TAU = Math.PI*2;
     public static double MAX_DOT_SIZE = 0.5;
     public static double BASE = Math.log(4) / LOG_MAX;
     public static int w;
