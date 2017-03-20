@@ -1540,7 +1540,7 @@ public class HomeActivity extends AppCompatActivity
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
-                Date thisDate = new Date(Integer.parseInt(musicCursor.getString(titleColumn)));
+                Date thisDate = new Date(Integer.parseInt(musicCursor.getString(dateAdded)));
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
                 String thisAlbum = musicCursor.getString(albumColumn);
