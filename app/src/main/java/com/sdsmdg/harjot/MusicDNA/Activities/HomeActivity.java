@@ -1525,7 +1525,7 @@ public class HomeActivity extends AppCompatActivity
             int titleColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.TITLE);
             int dateAdded = musicCursor.getColumnIndex
-                    (MediaStore.MediaColumns.DATE_ADDED);
+                    (MediaStore.MediaColumns.DATE_MODIFIED);
             int idColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media._ID);
             int artistColumn = musicCursor.getColumnIndex
@@ -1540,11 +1540,12 @@ public class HomeActivity extends AppCompatActivity
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
-                Date thisDate = new Date(Integer.parseInt(musicCursor.getString(dateAdded)));
+                Date thisDate = new Date((Long.parseLong(musicCursor.getString(dateAdded))*1000));
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
                 String thisAlbum = musicCursor.getString(albumColumn);
                 String path = musicCursor.getString(pathColumn);
+                //thisArtist = String.valueOf(thisDate);
                 long duration = musicCursor.getLong(durationColumn);
                 if (duration > 10000) {
                     LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration, thisDate);

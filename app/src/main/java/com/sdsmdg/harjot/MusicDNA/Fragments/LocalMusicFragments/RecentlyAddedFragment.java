@@ -40,19 +40,12 @@ import java.util.Random;
 
 public class RecentlyAddedFragment extends Fragment {
 
-    LocalTrackRecyclerAdapter adapter;
+    RecentlyAddedAdapter adapter;
     LocalMusicFragment.OnLocalTrackSelectedListener mCallback;
     Context ctx;
-
-    ShowcaseView showCase;
-
     RecyclerView lv;
     LinearLayoutManager mLayoutManager2;
-
-    FloatingActionButton shuffleFab;
-
     HomeActivity activity;
-
     View bottomMarginLayout;
 
     public RecentlyAddedFragment() {
@@ -93,42 +86,11 @@ public class RecentlyAddedFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_local);
-
-        if (HomeActivity.localTrackList.size() == 0) {
-            shuffleFab.setVisibility(View.INVISIBLE);
-        }
-        else {
-            Collections.sort(HomeActivity.localTrackList, new RecentlyAddedComparator());
-            Collections.sort(HomeActivity.finalLocalSearchResultList, new RecentlyAddedComparator());
-        }
-
-        shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        shuffleFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
-                    HomeActivity.queue.getQueue().add(ut);
-                }
-                if (HomeActivity.queue.getQueue().size() > 0) {
-                    Random r = new Random();
-                    int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
-                    HomeActivity.queueCurrentIndex = tmp;
-                    LocalTrack track = HomeActivity.localTrackList.get(tmp);
-                    HomeActivity.localSelectedTrack = track;
-                    HomeActivity.streamSelected = false;
-                    HomeActivity.localSelected = true;
-                    HomeActivity.queueCall = false;
-                    HomeActivity.isReloaded = false;
-                    mCallback.onLocalTrackSelected(-1);
-                }
-            }
-        });
+        Collections.sort(HomeActivity.localTrackList, new RecentlyAddedComparator());
+        Collections.sort(HomeActivity.finalLocalSearchResultList, new RecentlyAddedComparator());
 
         lv = (RecyclerView) view.findViewById(R.id.localMusicList);
-        adapter = new LocalTrackRecyclerAdapter(HomeActivity.finalLocalSearchResultList, getContext());
+        adapter = new RecentlyAddedAdapter(HomeActivity.finalLocalSearchResultList, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         lv.setLayoutManager(mLayoutManager2);
         lv.setItemAnimator(new DefaultItemAnimator());
@@ -178,45 +140,6 @@ public class RecentlyAddedFragment extends Fragment {
         mEndButton.setBackgroundColor(HomeActivity.themeColor);
         mEndButton.setTextColor(Color.WHITE);
 
-        showCase = new ShowcaseView.Builder(getActivity())
-                .blockAllTouches()
-                .singleShot(1)
-                .setStyle(R.style.CustomShowcaseTheme)
-                .useDecorViewAsParent()
-                .replaceEndButton(mEndButton)
-                .setContentTitlePaint(HomeActivity.tp)
-                .setTarget(new ViewTarget(R.id.songs_tab_alt_showcase, getActivity()))
-                .setContentTitle("All Songs")
-                .setContentText("All local Songs listed here.Click to Play.Long click for more options")
-                .build();
-        showCase.setButtonText("Next");
-        showCase.setButtonPosition(HomeActivity.lps);
-        showCase.overrideButtonClick(new View.OnClickListener() {
-            int count1 = 0;
-
-            @Override
-            public void onClick(View v) {
-                count1++;
-                switch (count1) {
-                    case 1:
-                        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                        lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
-                        lps.setMargins(margin, margin, margin, 5 + HomeActivity.navBarHeightSizeinDp);
-                        showCase.setTarget(new ViewTarget(shuffleFab.getId(), getActivity()));
-                        showCase.setContentTitle("Shuffle");
-                        showCase.setContentText("Play all songs, shuffled randomly");
-                        showCase.setButtonText("Done");
-                        showCase.setButtonPosition(lps);
-                        break;
-                    case 2:
-                        showCase.hide();
-                        break;
-                }
-            }
-
-        });
 
     }
 
@@ -224,12 +147,6 @@ public class RecentlyAddedFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shuffleFab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
     }
 
     public int getPosition(LocalTrack lt) {
@@ -255,26 +172,9 @@ public class RecentlyAddedFragment extends Fragment {
         refWatcher.watch(this);
     }
 
-    public void hideShuffleFab() {
-        if (shuffleFab != null)
-            shuffleFab.setVisibility(View.INVISIBLE);
-    }
-
-    public void showShuffleFab() {
-        if (shuffleFab != null)
-            shuffleFab.setVisibility(View.VISIBLE);
-    }
-
     public void updateAdapter() {
         if (adapter != null)
             adapter.notifyDataSetChanged();
     }
 
-    public boolean isShowcaseVisible() {
-        return (showCase != null && showCase.isShowing());
-    }
-
-    public void hideShowcase() {
-        showCase.hide();
-    }
 }

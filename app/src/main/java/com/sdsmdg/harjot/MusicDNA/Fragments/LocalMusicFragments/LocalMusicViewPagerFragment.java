@@ -137,7 +137,7 @@ public class LocalMusicViewPagerFragment extends Fragment {
         adapter.addFragment(new LocalMusicFragment(), "Songs");
         adapter.addFragment(new AlbumFragment(), "Albums");
         adapter.addFragment(new ArtistFragment(), "Artists");
-        adapter.addFragment(new RecentlyAddedFragment(), "RecentlyAdded");
+        adapter.addFragment(new RecentlyAddedFragment(), "Recent");
 
     }
 
