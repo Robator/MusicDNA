@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
@@ -28,6 +29,7 @@ public class RecentlyAddedAdapter extends RecyclerView.Adapter<RecentlyAddedAdap
     private Context ctx;
     ImageLoader imgLoader;
     String prevDate = "";
+    byte separatePos[] = new byte[HomeActivity.localTrackList.size()];
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -63,13 +65,26 @@ public class RecentlyAddedAdapter extends RecyclerView.Adapter<RecentlyAddedAdap
 
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
         String date = DATE_FORMAT.format(track.getDateAdded());
-
-        if(!prevDate.equals(date)) {
-            holder.dateAdded.setText(date);
-            prevDate = date;
-            holder.dateAdded.setVisibility(View.VISIBLE);
-        }else {
-            holder.dateAdded.setVisibility(View.GONE);
+        switch (separatePos[position]){
+            case 0:
+                if(!prevDate.equals(date)) {
+                    holder.dateAdded.setText(date);
+                    prevDate = date;
+                    holder.dateAdded.setVisibility(View.VISIBLE);
+                    separatePos[position] = 1;
+                }else {
+                    holder.dateAdded.setVisibility(View.GONE);
+                    separatePos[position] = 2;
+                }
+                break;
+            case 1:
+                holder.dateAdded.setText(date);
+                holder.dateAdded.setVisibility(View.VISIBLE);
+                prevDate = date;
+                break;
+            case 2:
+                holder.dateAdded.setVisibility(View.GONE);
+                break;
         }
         holder.title.setText(track.getTitle());
         holder.artist.setText(track.getArtist());

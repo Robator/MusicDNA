@@ -191,6 +191,7 @@ public class HomeActivity extends AppCompatActivity
     public static List<LocalTrack> finalSelectedTracks = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
     public static List<Album> albums = new ArrayList<>();
+
     public static List<Album> finalAlbums = new ArrayList<>();
     public static List<Artist> artists = new ArrayList<>();
         public static List<Artist> finalArtists = new ArrayList<>();
@@ -1766,7 +1767,8 @@ public class HomeActivity extends AppCompatActivity
             showCase.hide();
         } else if (plFrag != null && plFrag.isShowcaseVisible()) {
             plFrag.hideShowcase();
-        } else if (lFrag != null && lFrag.isShowcaseVisible()) {
+        } else if (lFrag != null && lFrag.
+                isShowcaseVisible()) {
             lFrag.hideShowcase();
         } else if (qFrag != null && qFrag.isShowcaseVisible()) {
             qFrag.hideShowcase();

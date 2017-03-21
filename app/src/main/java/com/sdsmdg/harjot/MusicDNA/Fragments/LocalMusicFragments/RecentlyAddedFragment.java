@@ -1,11 +1,8 @@
 package com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,26 +10,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener.*;
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.Utilities.Comparators.LocalMusicComparator;
 import com.sdsmdg.harjot.MusicDNA.Utilities.Comparators.RecentlyAddedComparator;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.Collections;
-import java.util.Random;
 
 /**
  * Created by azatfanisovic on 16.03.17.
