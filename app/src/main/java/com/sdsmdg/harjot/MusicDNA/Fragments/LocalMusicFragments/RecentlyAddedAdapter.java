@@ -67,6 +67,7 @@ public class RecentlyAddedAdapter extends RecyclerView.Adapter<RecentlyAddedAdap
         if(!prevDate.equals(date)) {
             holder.dateAdded.setText(date);
             prevDate = date;
+            holder.dateAdded.setVisibility(View.VISIBLE);
         }else {
             holder.dateAdded.setVisibility(View.GONE);
         }
