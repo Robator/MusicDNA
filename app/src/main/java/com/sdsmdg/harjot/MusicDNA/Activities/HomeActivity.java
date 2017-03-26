@@ -156,6 +156,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.View.GONE;
 
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         SearchView.OnQueryTextListener,
