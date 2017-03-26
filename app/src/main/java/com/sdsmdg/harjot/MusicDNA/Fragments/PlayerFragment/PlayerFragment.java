@@ -3,6 +3,7 @@ package com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment;
 
 import android.graphics.Canvas;
 import android.net.ConnectivityManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -36,10 +37,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.cleveroad.audiovisualization.AudioVisualization;
+import com.cleveroad.audiovisualization.DbmHandler;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.Config;
 import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.CustomAdapter;
 import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.SnappyRecyclerView;
 import com.sdsmdg.harjot.MusicDNA.CustomViews.CustomProgressBar;
@@ -71,7 +76,7 @@ public class PlayerFragment extends Fragment implements
 
     public SnappyRecyclerView snappyRecyclerView;
     CustomAdapter customAdapter;
-
+    private AudioVisualization audioVisualization;
     public static VisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
@@ -442,15 +447,17 @@ public class PlayerFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_player, container, false);
+        audioVisualization = (AudioVisualization)view.findViewById(R.id.visualizer_view);
         return view;
     }
 
     @Override
     public void onPause() {
+        audioVisualization.onPause();
         super.onPause();
     }
 
@@ -462,6 +469,7 @@ public class PlayerFragment extends Fragment implements
             snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
             customAdapter.notifyDataSetChanged();
         }
+        audioVisualization.onResume();
         snappyRecyclerView.setTransparency();
     }
 
@@ -506,9 +514,10 @@ public class PlayerFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view,@Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        audioVisualization.linkTo(DbmHandler.Factory.newVisualizerHandler(getContext(),0));
         imgLoader = new ImageLoader(getContext());
 
         smallPlayer = (RelativeLayout) view.findViewById(R.id.smallPlayer);
@@ -1122,6 +1131,7 @@ public class PlayerFragment extends Fragment implements
         if (mVisualizer != null) {
             mVisualizer.release();
         }
+        audioVisualization.release();
     }
 
     public void refresh() {

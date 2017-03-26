@@ -45,20 +45,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        UnifiedTrack ut = queue.get(position);
-        holder.albumArt.setAlpha(0.35f);
-        if (ut.getType()) {
-            Bitmap bmp = getBitmap(ut.getLocalTrack().getPath());
-            if (bmp != null) {
-                holder.albumArt.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                holder.albumArt.setImageBitmap(bmp);
-            } else {
-                holder.albumArt.setScaleType(ImageView.ScaleType.CENTER);
-                holder.albumArt.setImageResource(R.drawable.ic_default);
-            }
-        } else {
-            Picasso.with(ctx).load(ut.getStreamTrack().getArtworkURL()).into(holder.albumArt);
-        }
+        holder.albumArt.setImageResource(R.drawable.ic_default);
     }
 
     @Override
@@ -75,26 +62,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             albumArt = (ImageView) itemView.findViewById(R.id.album_art_container_v);
             blurredAlbumArt = (RealtimeBlurView) itemView.findViewById(R.id.blurred_album_art);
         }
-    }
-
-    public Bitmap getBitmap(String url) {
-        try {
-            android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-            mmr.setDataSource(url);
-            Bitmap bitmap = null;
-
-            byte[] data = mmr.getEmbeddedPicture();
-
-            if (data != null) {
-                bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                return bitmap;
-            } else {
-                return null;
-            }
-        } catch (Throwable ex) {
-            ex.printStackTrace();
-        }
-        return null;
     }
 
 }
