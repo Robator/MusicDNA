@@ -15,6 +15,9 @@ android {
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 
     buildTypes {
         release {
