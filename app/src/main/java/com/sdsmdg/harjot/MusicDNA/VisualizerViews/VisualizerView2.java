@@ -61,9 +61,6 @@ public class VisualizerView2 extends View {
         if (bmp != null) {
             canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 13), null);
         }
-        if (textEnabled && HomeActivity.tempSavedDNA != null) {
-            canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() * 16) / 17, mTextPaint);
-        }
     }
 
     public void update() {

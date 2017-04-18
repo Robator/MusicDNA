@@ -94,7 +94,6 @@ import com.sdsmdg.harjot.MusicDNA.Fragments.ViewAlbumFragment.ViewAlbumFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.ViewArtistFragment.ViewArtistFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.ViewPlaylistFragment.PlaylistTrackAdapter;
 import com.sdsmdg.harjot.MusicDNA.Fragments.ViewPlaylistFragment.ViewPlaylistFragment;
-import com.sdsmdg.harjot.MusicDNA.Fragments.ViewSavedDNAsFragment.ViewSavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.LocalMusicViewPagerFragment;
 import com.sdsmdg.harjot.MusicDNA.HeadsetHandler.HeadSetReceiver;
 import com.sdsmdg.harjot.MusicDNA.HorizontalRecyclerViewAdapters.LocalTracksHorizontalAdapter;
@@ -109,7 +108,6 @@ import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.LocalMusicFragme
 import com.sdsmdg.harjot.MusicDNA.Models.Album;
 import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
-import com.sdsmdg.harjot.MusicDNA.Models.AllSavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Artist;
 import com.sdsmdg.harjot.MusicDNA.Models.EqualizerModel;
 import com.sdsmdg.harjot.MusicDNA.Models.Favourite;
@@ -118,7 +116,6 @@ import com.sdsmdg.harjot.MusicDNA.Models.MusicFolder;
 import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.Models.Queue;
 import com.sdsmdg.harjot.MusicDNA.Models.RecentlyPlayed;
-import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Settings;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
@@ -237,9 +234,6 @@ public class HomeActivity extends AppCompatActivity
     public static AllPlaylists allPlaylists;
     public static AllMusicFolders allMusicFolders;
 
-    public static AllSavedDNA savedDNAs;
-    public static SavedDNA tempSavedDNA;
-
     public static EqualizerModel equalizerModel;
 
     public static List<LocalTrack> tempFolderContent;
@@ -300,7 +294,7 @@ public class HomeActivity extends AppCompatActivity
     ImageView favBanner;
     ImageView recentBanner;
     ImageView folderBanner;
-    ImageView savedDNABanner;
+
 
     ImageView localBannerPlayAll;
 
@@ -356,8 +350,6 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isAllPlaylistVisible = false;
     public static boolean isAllFolderVisible = false;
     public static boolean isFolderContentVisible = false;
-    public static boolean isAllSavedDnaVisisble = false;
-    public static boolean isSavedDNAVisible = false;
     public static boolean isAlbumVisible = false;
     public static boolean isArtistVisible = false;
     public static boolean isRecentVisible = false;
@@ -613,7 +605,6 @@ public class HomeActivity extends AppCompatActivity
         favBanner = (ImageView) findViewById(R.id.favBanner);
         recentBanner = (ImageView) findViewById(R.id.recentBanner);
         folderBanner = (ImageView) findViewById(R.id.folderBanner);
-        savedDNABanner = (ImageView) findViewById(R.id.savedDNABanner);
 
         localBannerPlayAll = (ImageView) findViewById(R.id.local_banner_play_all);
 
@@ -639,12 +630,6 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 showFragment("allFolders");
-            }
-        });
-        savedDNABanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("allSavedDNAs");
             }
         });
 
@@ -1096,10 +1081,6 @@ public class HomeActivity extends AppCompatActivity
                         e.printStackTrace();
                     }
 
-                    if (prevVersionCode == -1 || prevVersionCode <= 30) {
-                        savedDNAs = null;
-                    }
-
                     if (allPlaylists == null) {
                         allPlaylists = new AllPlaylists();
                     }
@@ -1121,9 +1102,6 @@ public class HomeActivity extends AppCompatActivity
                     }
                     if (allMusicFolders == null) {
                         allMusicFolders = new AllMusicFolders();
-                    }
-                    if (savedDNAs == null) {
-                        savedDNAs = new AllSavedDNA();
                     }
 
                     if (equalizerModel == null) {
@@ -1486,9 +1464,6 @@ public class HomeActivity extends AppCompatActivity
             String json9 = mPrefs.getString("equalizer", "");
             equalizerModel = gson.fromJson(json9, EqualizerModel.class);
             Log.d("TIME", "equalizer");
-            String json = mPrefs.getString("savedDNAs", "");
-            savedDNAs = gson.fromJson(json, AllSavedDNA.class);
-            Log.d("TIME", "savedDNAs");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1748,7 +1723,6 @@ public class HomeActivity extends AppCompatActivity
         }
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
         EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
-        ViewSavedDNA vsdFrag = (ViewSavedDNA) fragMan.findFragmentByTag("allSavedDNAs");
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -1764,8 +1738,6 @@ public class HomeActivity extends AppCompatActivity
             qFrag.hideShowcase();
         } else if (eqFrag != null && eqFrag.isShowcaseVisible()) {
             eqFrag.hideShowcase();
-        } else if (vsdFrag != null && vsdFrag.isShowcaseVisible()) {
-            vsdFrag.hideShowcase();
         } else if (isFullScreenEnabled) {
             isFullScreenEnabled = false;
             plFrag.bottomContainer.setVisibility(View.VISIBLE);
@@ -1839,12 +1811,6 @@ public class HomeActivity extends AppCompatActivity
                 } else if (isAllFolderVisible) {
                     hideFragment("allFolders");
                     setTitle("Music DNA");
-                } else if (isAllSavedDnaVisisble) {
-                    hideFragment("allSavedDNAs");
-                    setTitle("Music DNA");
-                } else if (isSavedDNAVisible) {
-                    hideFragment("savedDNA");
-                    setTitle("Music DNA");
                 } else if (isRecentVisible) {
                     hideFragment("recent");
                     setTitle("Music DNA");
@@ -1910,8 +1876,6 @@ public class HomeActivity extends AppCompatActivity
             showFragment("favourite");
         } else if (id == R.id.nav_folder) {
             showFragment("allFolders");
-        } else if (id == R.id.nav_view) {
-            showFragment("allSavedDNAs");
         } else if (id == R.id.nav_settings) {
             showFragment("settings");
         }
@@ -2646,11 +2610,6 @@ public class HomeActivity extends AppCompatActivity
             // Finish the activity
             finish();
             return;
-        }
-
-        // Save the DNA if saving is enabled
-        if (isSaveDNAEnabled) {
-            new SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
@@ -4027,23 +3986,6 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
-        } else if (type.equals("allSavedDNAs") && !isAllSavedDnaVisisble) {
-            navigationView.setCheckedItem(R.id.nav_view);
-            isAllSavedDnaVisisble = true;
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            ViewSavedDNA newFragment = (ViewSavedDNA) fm.findFragmentByTag("allSavedDNAs");
-            if (newFragment == null) {
-                newFragment = new ViewSavedDNA();
-            }
-            fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_left,
-                            R.anim.slide_right,
-                            R.anim.slide_left,
-                            R.anim.slide_right)
-                    .add(R.id.fragContainer, newFragment, "allSavedDNAs")
-                    .show(newFragment)
-                    .addToBackStack(null)
-                    .commitAllowingStateLoss();
         } else if (type.equals("viewAlbum") && !isAlbumVisible) {
             isAlbumVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -4249,17 +4191,6 @@ public class HomeActivity extends AppCompatActivity
                         .remove(frag)
                         .commitAllowingStateLoss();
             }
-        } else if (type.equals("allSavedDNAs")) {
-            isAllSavedDnaVisisble = false;
-            setTitle("Music DNA");
-            navigationView.setCheckedItem(R.id.nav_home);
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            android.support.v4.app.Fragment frag = fm.findFragmentByTag("allSavedDNAs");
-            if (frag != null) {
-                fm.beginTransaction()
-                        .remove(frag)
-                        .commitAllowingStateLoss();
-            }
         } else if (type.equals("viewAlbum")) {
             isAlbumVisible = false;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -4332,7 +4263,6 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("favourite");
         hideFragment("folderContent");
         hideFragment("allFolders");
-        hideFragment("allSavedDNAs");
         hideFragment("viewAlbum");
         hideFragment("viewArtist");
         hideFragment("recent");
@@ -4465,23 +4395,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public static class SaveTheDNAs extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (!isSaveDNAsRunning) {
-                isSaveDNAsRunning = true;
-                try {
-                    String json = gson.toJson(savedDNAs);
-                    prefsEditor.putString("savedDNAs", json);
-                } catch (Exception e) {
-
-                }
-                isSaveDNAsRunning = false;
-            }
-            return null;
-        }
-    }
 
     public static class SaveQueue extends AsyncTask<Void, Void, Void> {
 
