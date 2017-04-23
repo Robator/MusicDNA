@@ -1,11 +1,14 @@
 package com.sdsmdg.harjot.MusicDNA.Models;
 
+import java.util.Date;
+
 /**
  * Created by Harjot on 09-May-16.
  */
 public class LocalTrack {
     private long id;
     private String title;
+    private Date dateAdded;
     private String artist;
     private String album;
     private String path;
@@ -35,13 +38,14 @@ public class LocalTrack {
         this.duration = duration;
     }
 
-    public LocalTrack(long id, String title, String artist, String album, String path, long duration) {
+    public LocalTrack(long id, String title, String artist, String album, String path, long duration, Date dateAdded) {
         this.id = id;
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.path = path;
         this.duration = duration;
+        this.dateAdded = dateAdded;
 
     }
 
@@ -67,5 +71,13 @@ public class LocalTrack {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
     }
 }

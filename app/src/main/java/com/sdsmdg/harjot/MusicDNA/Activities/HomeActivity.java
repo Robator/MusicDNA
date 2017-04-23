@@ -85,6 +85,7 @@ import com.sdsmdg.harjot.MusicDNA.Fragments.EqualizerFragment.EqualizerFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.FavouritesFragment.FavouritesFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.FolderContentFragment.FolderContentFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.AllFoldersFragment.FolderFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.RecentlyAddedFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.NewPlaylistFragment.NewPlaylistFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.QueueFragment.QueueFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.RecentsFragment.RecentsFragment;
@@ -142,6 +143,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -153,6 +155,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 import static android.view.View.GONE;
 
@@ -175,6 +178,8 @@ public class HomeActivity extends AppCompatActivity
         AlbumFragment.onAlbumClickListener,
         ViewAlbumFragment.albumCallbackListener,
         ArtistFragment.onArtistClickListener,
+        RecentlyAddedFragment.OnLocalTrackSelectedListener,
+//        LocalRecentlyAdded.OnLocalLastTrackSelectedListener,
         ViewArtistFragment.artistCallbackListener,
         RecentsFragment.recentsCallbackListener,
         SettingsFragment.SettingsFragmentCallbackListener,
@@ -188,9 +193,10 @@ public class HomeActivity extends AppCompatActivity
     public static List<LocalTrack> finalSelectedTracks = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
     public static List<Album> albums = new ArrayList<>();
+
     public static List<Album> finalAlbums = new ArrayList<>();
     public static List<Artist> artists = new ArrayList<>();
-    public static List<Artist> finalArtists = new ArrayList<>();
+        public static List<Artist> finalArtists = new ArrayList<>();
     public static List<UnifiedTrack> continuePlayingList = new ArrayList<>();
 
     public String versionName;
@@ -1521,6 +1527,8 @@ public class HomeActivity extends AppCompatActivity
             //get columns
             int titleColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.TITLE);
+            int dateAdded = musicCursor.getColumnIndex
+                    (MediaStore.MediaColumns.DATE_MODIFIED);
             int idColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media._ID);
             int artistColumn = musicCursor.getColumnIndex
@@ -1535,13 +1543,15 @@ public class HomeActivity extends AppCompatActivity
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
+                Date thisDate = new Date((Long.parseLong(musicCursor.getString(dateAdded))*1000));
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
                 String thisAlbum = musicCursor.getString(albumColumn);
                 String path = musicCursor.getString(pathColumn);
+                //thisArtist = String.valueOf(thisDate);
                 long duration = musicCursor.getLong(durationColumn);
                 if (duration > 10000) {
-                    LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration);
+                    LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration, thisDate);
                     localTrackList.add(lt);
                     finalLocalSearchResultList.add(lt);
 
@@ -1759,7 +1769,8 @@ public class HomeActivity extends AppCompatActivity
             showCase.hide();
         } else if (plFrag != null && plFrag.isShowcaseVisible()) {
             plFrag.hideShowcase();
-        } else if (lFrag != null && lFrag.isShowcaseVisible()) {
+        } else if (lFrag != null && lFrag.
+                isShowcaseVisible()) {
             lFrag.hideShowcase();
         } else if (qFrag != null && qFrag.isShowcaseVisible()) {
             qFrag.hideShowcase();

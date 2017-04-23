@@ -27,7 +27,8 @@ import java.util.List;
 /**
  * Created by Harjot on 20-May-16.
  */
-public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAdapter.MyViewHolder> implements ItemTouchHelperAdapter {
+public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAdapter.MyViewHolder>
+        implements ItemTouchHelperAdapter {
 
     private List<UnifiedTrack> favouriteList;
     private Context ctx;
