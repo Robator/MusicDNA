@@ -8,4 +8,19 @@
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorDark">#111111</color>
     <color name="colorListItem">#111111</color>
+
+    //for visualization
+    <color name="av_color1">#b20000</color>
+    <color name="av_color2">#7f0000</color>
+    <color name="av_color3">#330000</color>
+    <color name="av_color4">#000000</color>
+
+    <color name="av_color_bg">#e50000</color>
+
+    <array name="av_colors">
+        <item>@color/av_color1</item>
+        <item>@color/av_color2</item>
+        <item>@color/av_color3</item>
+        <item>@color/av_color4</item>
+    </array>
 </resources>

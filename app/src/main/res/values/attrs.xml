@@ -4,5 +4,14 @@
         <attr name="blurRadius" format="integer" />
         <attr name="downsampleFactor" format="integer" />
         <attr name="overlayColor" format="color" />
+        <attr name="av_wavesCount" format="integer" />
+        <attr name="av_wavesColors" format="reference" />
+        <attr name="av_wavesHeight" format="dimension" />
+        <attr name="av_wavesFooterHeight" format="dimension" />
+        <attr name="av_bubblesSize" format="dimension" />
+        <attr name="av_bubblesRandomizeSizes" format="boolean" />
+        <attr name="av_bubblesPerLayer" format="integer" />
+        <attr name="av_layersCount" format="integer" />
+        <attr name="av_backgroundColor" format="color|reference" />
     </declare-styleable>
 </resources>

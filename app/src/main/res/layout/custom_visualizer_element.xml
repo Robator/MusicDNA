@@ -8,8 +8,11 @@
         android:id="@+id/album_art_container_v"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.35"
-        android:scaleType="centerCrop" />
+        android:alpha="0.20"
+        android:src = "@drawable/ic_default"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="112dp"/>
 
     <com.github.mmin18.widget.RealtimeBlurView
         android:id="@+id/blurred_album_art"

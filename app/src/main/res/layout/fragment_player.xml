@@ -7,7 +7,21 @@
     android:clickable="true"
     android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
     android:visibility="visible">
-
+    <com.cleveroad.audiovisualization.GLAudioVisualizationView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/visualizer_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:av_bubblesSize="@dimen/bubble_size"
+        app:av_bubblesRandomizeSizes="true"
+        app:av_wavesHeight="@dimen/wave_height"
+        app:av_wavesFooterHeight="@dimen/footer_height"
+        app:av_wavesCount="7"
+        app:av_layersCount="4"
+        app:av_backgroundColor="@color/av_color_bg"
+        app:av_bubblesPerLayer="16"
+        />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="70dp">
@@ -339,15 +353,6 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:src="@drawable/ic_equalizer_white_48dp" />
-
-            <ImageView
-                android:id="@+id/toggleSaveDNA"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="1"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:src="@drawable/ic_save_outline" />
 
             <ImageView
                 android:id="@+id/fav_icon"

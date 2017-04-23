@@ -3,6 +3,7 @@ package com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment;
 
 import android.graphics.Canvas;
 import android.net.ConnectivityManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -36,6 +37,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.cleveroad.audiovisualization.AudioVisualization;
+import com.cleveroad.audiovisualization.DbmHandler;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
@@ -45,7 +49,6 @@ import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.CustomAdapter;
 import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.SnappyRecyclerView;
 import com.sdsmdg.harjot.MusicDNA.CustomViews.CustomProgressBar;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
-import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
@@ -72,7 +75,7 @@ public class PlayerFragment extends Fragment implements
 
     public SnappyRecyclerView snappyRecyclerView;
     CustomAdapter customAdapter;
-
+    private AudioVisualization audioVisualization;
     public static VisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
@@ -101,8 +104,6 @@ public class PlayerFragment extends Fragment implements
     public ImageView previousTrackController;
     public ImageView favouriteIcon;
     public ImageView queueIcon;
-
-    public ImageView saveDNAToggle;
 
     boolean isFav = false;
 
@@ -392,7 +393,6 @@ public class PlayerFragment extends Fragment implements
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                     isReplayIconVisible = true;
                 }
-                new SaveDNA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
@@ -443,15 +443,17 @@ public class PlayerFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_player, container, false);
+        audioVisualization = (AudioVisualization)view.findViewById(R.id.visualizer_view);
         return view;
     }
 
     @Override
     public void onPause() {
+        audioVisualization.onPause();
         super.onPause();
     }
 
@@ -463,6 +465,7 @@ public class PlayerFragment extends Fragment implements
             snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
             customAdapter.notifyDataSetChanged();
         }
+        audioVisualization.onResume();
         snappyRecyclerView.setTransparency();
     }
 
@@ -507,9 +510,10 @@ public class PlayerFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view,@Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        audioVisualization.linkTo(DbmHandler.Factory.newVisualizerHandler(getContext(),0));
         imgLoader = new ImageLoader(getContext());
 
         smallPlayer = (RelativeLayout) view.findViewById(R.id.smallPlayer);
@@ -606,26 +610,6 @@ public class PlayerFragment extends Fragment implements
             }
         });
         equalizerIcon.setVisibility(View.INVISIBLE);
-
-        saveDNAToggle = (ImageView) view.findViewById(R.id.toggleSaveDNA);
-        if (homeActivity.isSaveDNAEnabled) {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
-        } else {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
-        }
-
-        saveDNAToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (homeActivity.isSaveDNAEnabled) {
-                    homeActivity.isSaveDNAEnabled = false;
-                    saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
-                } else {
-                    homeActivity.isSaveDNAEnabled = true;
-                    saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
-                }
-            }
-        });
 
         mainTrackController = (ImageView) view.findViewById(R.id.controller);
         nextTrackController = (ImageView) view.findViewById(R.id.next);
@@ -1123,6 +1107,7 @@ public class PlayerFragment extends Fragment implements
         if (mVisualizer != null) {
             mVisualizer.release();
         }
+        audioVisualization.release();
     }
 
     public void refresh() {
@@ -1179,11 +1164,6 @@ public class PlayerFragment extends Fragment implements
             repeatController.setImageResource(R.drawable.ic_repeat_alpha);
         }
 
-        if (homeActivity.isSaveDNAEnabled) {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
-        } else {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
-        }
 
         equalizerIcon.setVisibility(View.INVISIBLE);
 
@@ -1345,66 +1325,6 @@ public class PlayerFragment extends Fragment implements
         }
         Pair<String, String> pair = Pair.create(minS, secS);
         return pair;
-    }
-
-    public class SaveDNA extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (homeActivity.isSaveDNAEnabled) {
-                Bitmap bmp = mVisualizerView.bmp;
-
-                // Generate base64 encoded bitmap
-                String base64encoded = getBase64encodedBitmap(bmp);
-
-                // Create SavedDNA object with relevant values.
-                SavedDNA savedDNA;
-                if (localIsPlaying) {
-                    savedDNA = new SavedDNA(localTrack.getTitle(), true, localTrack.getPath(), null, localTrack.getArtist(), base64encoded);
-                } else {
-                    savedDNA = new SavedDNA(track.getTitle(), false, null, track.getArtworkURL(), "", base64encoded);
-                }
-
-                // Check if a DNA exists for the current song, and remove it.
-                for (int i = 0; i < homeActivity.savedDNAs.getSavedDNAs().size(); i++) {
-                    if (homeActivity.savedDNAs.getSavedDNAs().get(i).getName().equals(savedDNA.getName())) {
-                        homeActivity.savedDNAs.getSavedDNAs().remove(i);
-                        break;
-                    }
-                }
-
-                // Add the DNA to the first position.
-                homeActivity.savedDNAs.getSavedDNAs().add(0, savedDNA);
-
-                // If number of DNAs get more than 10, then remove the 11th DNA to keep size as 10.
-                // Caution : 0-indexed arrays.
-                if (homeActivity.savedDNAs.getSavedDNAs().size() > 10) {
-                    homeActivity.savedDNAs.getSavedDNAs().remove(10);
-                }
-
-                // Display Toast.
-                homeActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(ctx, "DNA Saved!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            // Set flags to initial values.
-            completed = false;
-            isPrepared = false;
-
-            // Pause the MediaPlayer and call onComplete().
-            mMediaPlayer.pause();
-            mCallback.onComplete();
-        }
     }
 
     public boolean isShowcaseVisible() {
